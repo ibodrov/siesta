@@ -38,12 +38,12 @@
 
     <resteasy.version>3.0.18.Final</resteasy.version>
     <jackson2.version>2.8.0</jackson2.version>
-    
+
     <repoHost>https://otto.takari.io</repoHost>
     <releaseName>Takari Releases</releaseName>
     <releaseUrl>${repoHost}/service/local/staging/deploy/maven2</releaseUrl>
     <snapshotName>Takari Snapshots</snapshotName>
-    <snapshotUrl>${repoHost}/content/repositories/snapshots</snapshotUrl>    
+    <snapshotUrl>${repoHost}/content/repositories/snapshots</snapshotUrl>
   </properties>
 
   <distributionManagement>
@@ -89,7 +89,7 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>18.0</version>
+        <version>19.0</version>
       </dependency>
 
       <dependency>
@@ -107,19 +107,19 @@
       <dependency>
         <groupId>org.eclipse.sisu</groupId>
         <artifactId>org.eclipse.sisu.inject</artifactId>
-        <version>0.2.1</version>
+        <version>0.3.3</version>
       </dependency>
 
       <dependency>
-        <groupId>org.sonatype.sisu</groupId>
-        <artifactId>sisu-guice</artifactId>
-        <version>3.2.1</version>
+        <groupId>com.google.inject</groupId>
+        <artifactId>guice</artifactId>
+        <version>4.0</version>
       </dependency>
 
       <dependency>
-        <groupId>org.sonatype.sisu.inject</groupId>
-        <artifactId>guice-servlet</artifactId>
-        <version>3.2.1</version>
+         <groupId>com.google.inject.extensions</groupId>
+         <artifactId>guice-servlet</artifactId>
+         <version>4.0</version>
       </dependency>
 
       <dependency>
