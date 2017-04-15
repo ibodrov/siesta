@@ -13,21 +13,7 @@
 
 package org.sonatype.siesta.server;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.ext.RuntimeDelegate;
-
-import org.sonatype.siesta.Component;
-
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Key;
 import org.eclipse.sisu.BeanEntry;
 import org.eclipse.sisu.Mediator;
@@ -35,6 +21,21 @@ import org.eclipse.sisu.inject.BeanLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.sonatype.siesta.Component;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.ext.RuntimeDelegate;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -65,8 +66,8 @@ public class SiestaServlet
   }
 
   @Override
-  public void init(final ServletConfig config) throws ServletException {
-    super.init(config);
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config = addDefaults(config));
 
     // TODO: Figure out what version of RESTEasy is used and log it
 
@@ -148,5 +149,51 @@ public class SiestaServlet
     super.destroy();
 
     log.info("Destroyed");
+  }
+
+  private static ServletConfig addDefaults(ServletConfig cfg) {
+    // resteasy 3.1.x compatibility hack
+    return new OverridedServletConfig(cfg, ImmutableMap.of("resteasy.servlet.context.deployment", "false"));
+  }
+
+  private static class OverridedServletConfig implements ServletConfig {
+
+    private final ServletConfig delegate;
+    private final Map<String, String> overrides;
+
+    private OverridedServletConfig(ServletConfig delegate, Map<String, String> overrides) {
+      this.delegate = delegate;
+      this.overrides = overrides;
+    }
+
+    @Override
+    public String getServletName() {
+      return delegate.getServletName();
+    }
+
+    @Override
+    public ServletContext getServletContext() {
+      return delegate.getServletContext();
+    }
+
+    @Override
+    public String getInitParameter(String name) {
+      String v = overrides.get(name);
+      return v != null ? v : delegate.getInitParameter(name);
+    }
+
+    @Override
+    public Enumeration<String> getInitParameterNames() {
+      Enumeration<String> orig = delegate.getInitParameterNames();
+
+      Set<String> keys = new HashSet<>();
+      while (orig.hasMoreElements()) {
+        keys.add(orig.nextElement());
+      }
+      keys.addAll(overrides.keySet());
+
+      Vector<String> v = new Vector<>(keys);
+      return v.elements();
+    }
   }
 }

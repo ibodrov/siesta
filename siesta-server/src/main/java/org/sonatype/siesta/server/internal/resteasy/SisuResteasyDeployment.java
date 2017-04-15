@@ -12,6 +12,7 @@
  */
 package org.sonatype.siesta.server.internal.resteasy;
 
+import org.jboss.resteasy.core.SynchronousDispatcher;
 import org.jboss.resteasy.spi.ResteasyDeployment;
 
 /**

@@ -28,7 +28,6 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.ParamConverterProvider;
 
-import org.jboss.resteasy.client.exception.mapper.ClientExceptionMapper;
 import org.jboss.resteasy.core.MediaTypeMap;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.jboss.resteasy.spi.StringConverter;
@@ -50,7 +49,7 @@ public class SisuResteasyProviderFactory
   /**
    * Unregisters a @Provider type from this factory.
    *
-   * @param provider type
+   * @param type provider
    */
   public void removeRegistrations(Class<?> type) {
     log.debug("Removing registrations for: {}", type.getName());
@@ -87,8 +86,8 @@ public class SisuResteasyProviderFactory
     else if (ParamConverterProvider.class.isAssignableFrom(type)) {
       removeInstancesOf(type, paramConverterProviders);
     }
-    else if (ClientExceptionMapper.class.isAssignableFrom(type)) {
-      removeInstancesOf(type, clientExceptionMappers.values());
+    else if (ExceptionMapper.class.isAssignableFrom(type)) {
+      removeInstancesOf(type, exceptionMappers.values());
     }
     else if (StringConverter.class.isAssignableFrom(type)) {
       removeInstancesOf(type, stringConverters.values());

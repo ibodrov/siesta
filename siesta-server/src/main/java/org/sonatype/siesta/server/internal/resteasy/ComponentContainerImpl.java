@@ -25,7 +25,6 @@ import org.sonatype.siesta.Resource;
 import org.sonatype.siesta.server.ComponentContainer;
 
 import org.eclipse.sisu.BeanEntry;
-import org.jboss.resteasy.logging.Logger.LoggerType;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.jboss.resteasy.spi.ResteasyDeployment;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
@@ -42,11 +41,6 @@ public class ComponentContainerImpl
   implements ComponentContainer
 {
   private static final Logger log = LoggerFactory.getLogger(ComponentContainerImpl.class);
-
-  public ComponentContainerImpl() {
-    // Configure RESTEasy to use SLF4j
-    org.jboss.resteasy.logging.Logger.setLoggerType(LoggerType.SLF4J);
-  }
 
   @Override
   public void init(final ServletConfig servletConfig) throws ServletException {
